@@ -4,60 +4,71 @@
 'use strict';
 
 var React = require('react-native');
-var { requireNativeComponent, PropTypes } = React;
-var RCTUIManager = React.NativeModules.UIManager;
+var {
+  NativeModules,
+  PropTypes,
+  requireNativeComponent,
+} = React;
 
-var WEBVIEW_REF = 'androidCameraView';
+class CameraView extends React.Component {
+  constructor() {
+    super();
+    this.onChange = this.onChange.bind(this);
+  }
 
-var CameraViewAndroid = React.createClass({
-  propTypes: {
-    url: PropTypes.string,
-    baseUrl: PropTypes.string,
-    html: PropTypes.string,
-    htmlCharset: PropTypes.string,
-    userAgent: PropTypes.string,
-    injectedJavaScript: PropTypes.string,
-    disablePlugins: PropTypes.bool,
-    disableCookies: PropTypes.bool,
-    javaScriptEnabled: PropTypes.bool,
-    geolocationEnabled: PropTypes.bool,
-    builtInZoomControls: PropTypes.bool,
-    onNavigationStateChange: PropTypes.func
-  },
-  _onNavigationStateChange: function(event) {
-    if (this.props.onNavigationStateChange) {
-      this.props.onNavigationStateChange(event.nativeEvent);
+  onChange(event) {
+    if (!this.props.onBarCodeRead) {
+      return;
     }
-  },
-  goBack: function() {
-    RCTUIManager.dispatchViewManagerCommand(
-      this._getWebViewHandle(),
-      RCTUIManager.RNCameraViewAndroid.Commands.goBack,
-      null
+
+    this.props.onBarCodeRead({
+      type: event.nativeEvent.type,
+      data: event.nativeEvent.data,
+    });
+  }
+
+  toggleFlashLight() {
+    NativeModules.RNCameraView.toggleFlashLight();
+  }
+
+  render() {
+    return (
+      <RNCameraView
+        {...this.props}
+        onChange={this.onChange}
+      />
     );
-  },
-  goForward: function() {
-    RCTUIManager.dispatchViewManagerCommand(
-      this._getWebViewHandle(),
-      RCTUIManager.RNCameraViewAndroid.Commands.goForward,
-      null
-    );
-  },
-  reload: function() {
-    RCTUIManager.dispatchViewManagerCommand(
-      this._getWebViewHandle(),
-      RCTUIManager.RNCameraViewAndroid.Commands.reload,
-      null
-    );
-  },
-  render: function() {
-    return <RNCameraView ref={WEBVIEW_REF} {...this.props} onNavigationStateChange={this._onNavigationStateChange} />;
-  },
-  _getWebViewHandle: function() {
-    return React.findNodeHandle(this.refs[WEBVIEW_REF]);
-  },
+  }
+}
+
+CameraView.propTypes = {
+  viewFinderBackgroundColor: PropTypes.string,
+  viewFinderBorderColor: PropTypes.string,
+  viewFinderBorderWidth: PropTypes.number,
+  viewFinderBorderLength: PropTypes.number,
+  viewFinderDrawLaser: PropTypes.bool,
+  viewFinderLaserColor: PropTypes.string,
+  torchMode: PropTypes.string,
+  cameraType: PropTypes.string,
+  onBarCodeRead: PropTypes.func,
+  rotation: PropTypes.number,
+  scaleX: PropTypes.number,
+  scaleY: PropTypes.number,
+  translateX: PropTypes.number,
+  translateY: PropTypes.number,
+  importantForAccessibility: PropTypes.string,
+  accessibilityLabel: PropTypes.string,
+  testID: PropTypes.string,
+  renderToHardwareTextureAndroid: PropTypes.string,
+  onLayout: PropTypes.bool
+};
+
+var RNCameraView = requireNativeComponent('RNCameraView', CameraView, {
+  nativeOnly: {
+    onChange: true,
+    accessibilityLiveRegion: 'none',
+    accessibilityComponentType: 'button'
+  }
 });
 
-var RNCameraView= requireNativeComponent('RNCameraView', null);
-
-module.exports = CameraViewAndroid;
+module.exports = CameraView;

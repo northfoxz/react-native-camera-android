@@ -96,6 +96,7 @@ public class RNCameraViewManager extends ViewGroupManager<RNCameraView> implemen
         mCameraView.setLaserColor(DEFAULT_VIEWFINDER_LASER_COLOR);
         mCameraView.setCameraType(DEFAULT_CAMERA_TYPE);
         mCameraView.setTorchMode(DEFAULT_TORCH_MODE);
+        mCameraView.toggleFlash();
         mCameraViewVisible = true;
         return mCameraView;
     }

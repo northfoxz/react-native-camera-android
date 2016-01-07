@@ -6,17 +6,17 @@ import android.graphics.Color;
 import android.hardware.Camera;
 import android.util.AttributeSet;
 
-import me.dm7.barcodescanner.core.IViewFinder;
-import me.dm7.barcodescanner.core.ViewFinderView;
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.zxing.Result;
 
-public class RNCameraView extends ZXingScannerView implements ZXingScannerView.ResultHandler {
+import me.dm7.barcodescanner.core.IViewFinder;
+import me.dm7.barcodescanner.core.ViewFinderView;
+
+public class RNCameraView extends RNCameraComponentView implements RNCameraComponentView.ResultHandler {
     private boolean mDrawLaser;
     private ViewFinderView mViewFinderView;
     private int mCameraId = -1;
@@ -124,12 +124,20 @@ public class RNCameraView extends ZXingScannerView implements ZXingScannerView.R
         }
         mPrevCameraType = type;
     }
+    
+    @ReactMethod
+    public void toggleFlashLight(RNCameraView view) {
+        view.toggleFlash();
+    }
 
     @Override
     public void handleResult(Result result) {
+
+        // Received Barcode Result!
         WritableMap event = Arguments.createMap();
         event.putString("data", result.getText());
         event.putString("type", result.getBarcodeFormat().toString());
+
         ReactContext reactContext = (ReactContext)getContext();
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
                 getId(),
