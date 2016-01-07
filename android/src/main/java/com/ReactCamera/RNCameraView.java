@@ -1,145 +1,142 @@
 package com.ReactCamera;
 
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.hardware.Camera;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.util.AttributeSet;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import me.dm7.barcodescanner.core.IViewFinder;
+import me.dm7.barcodescanner.core.ViewFinderView;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-/**
- * Surface on which the camera projects it's capture results.
- */
-public class RNCameraView extends SurfaceView implements SurfaceHolder.Callback {
-    TextView testView;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.google.zxing.Result;
 
-    Camera camera;
-    SurfaceView surfaceView;
-    SurfaceHolder surfaceHolder;
-    PictureCallback rawCallback;
-    ShutterCallback shutterCallback;
-    PictureCallback jpegCallback;
-    private final String tag = "VideoServer";
+public class RNCameraView extends ZXingScannerView implements ZXingScannerView.ResultHandler {
+    private boolean mDrawLaser;
+    private ViewFinderView mViewFinderView;
+    private int mCameraId = -1;
+    private String mPrevCameraType = "";
+    private String mTorchMode = "";
 
-    Button start, stop, capture;
+    public RNCameraView(Context context) {
+        super(context);
+        setResultHandler(this);
+    }
 
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-
-        start = (Button)findViewById(R.id.btn_start);
-        start.setOnClickListener(new Button.OnClickListener()
-        {
-            public void onClick(View arg0) {
-                start_camera();
-            }
-        });
-        stop = (Button)findViewById(R.id.btn_stop);
-        capture = (Button) findViewById(R.id.capture);
-        stop.setOnClickListener(new Button.OnClickListener()
-        {
-            public void onClick(View arg0) {
-                stop_camera();
-            }
-        });
-        capture.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                captureImage();
-            }
-        });
-
-        surfaceView = (SurfaceView)findViewById(R.id.surfaceView1);
-        surfaceHolder = surfaceView.getHolder();
-        surfaceHolder.addCallback(this);
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        rawCallback = new PictureCallback() {
-            public void onPictureTaken(byte[] data, Camera camera) {
-                Log.d("Log", "onPictureTaken - raw");
-            }
-        };
-
-        /** Handles data for jpeg picture */
-        shutterCallback = new ShutterCallback() {
-            public void onShutter() {
-                Log.i("Log", "onShutter'd");
-            }
-        };
-        jpegCallback = new PictureCallback() {
-            public void onPictureTaken(byte[] data, Camera camera) {
-                FileOutputStream outStream = null;
-                try {
-                    outStream = new FileOutputStream(String.format(
-                            "/sdcard/%d.jpg", System.currentTimeMillis()));
-                    outStream.write(data);
-                    outStream.close();
-                    Log.d("Log", "onPictureTaken - wrote bytes: " + data.length);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                }
-                Log.d("Log", "onPictureTaken - jpeg");
-            }
-        };
-    }
-
-    private void captureImage() {
-        // TODO Auto-generated method stub
-        camera.takePicture(shutterCallback, rawCallback, jpegCallback);
-    }
-
-    private void start_camera()
-    {
-        try{
-            camera = Camera.open();
-        }catch(RuntimeException e){
-            Log.e(tag, "init_camera: " + e);
-            return;
+    protected IViewFinder createViewFinderView(Context context) {
+        if (mDrawLaser) {
+            mViewFinderView = new ViewFinderView(context);
         }
-        Camera.Parameters param;
-        param = camera.getParameters();
-        //modify parameter
-        param.setPreviewFrameRate(20);
-        param.setPreviewSize(176, 144);
-        camera.setParameters(param);
-        try {
-            camera.setPreviewDisplay(surfaceHolder);
-            camera.startPreview();
-            //camera.takePicture(shutter, raw, jpeg)
-        } catch (Exception e) {
-            Log.e(tag, "init_camera: " + e);
-            return;
+        else {
+            mViewFinderView = new CustomViewFinderView(context);
+        }
+
+        return mViewFinderView;
+    }
+
+    private static class CustomViewFinderView extends ViewFinderView {
+        public CustomViewFinderView(Context context) {
+            super(context);
+        }
+
+        public CustomViewFinderView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        @Override
+        public void onDraw(Canvas canvas) {
+            if(getFramingRect() == null) {
+                return;
+            }
+
+            drawViewFinderMask(canvas);
+            drawViewFinderBorder(canvas);
         }
     }
 
-    private void stop_camera()
-    {
-        camera.stopPreview();
-        camera.release();
+    // #AARRGGBB
+    public void setMaskColor(String maskColor) {
+        mViewFinderView.setMaskColor(Color.parseColor(maskColor));
     }
 
-    public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
-        // TODO Auto-generated method stub
+    // #AARRGGBB
+    public void setBorderColor(String borderColor) {
+        mViewFinderView.setBorderColor(Color.parseColor(borderColor));
     }
 
-    public void surfaceCreated(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
+    public void setBorderStrokeWidth(int borderStrokeWidth) {
+        mViewFinderView.setBorderStrokeWidth(borderStrokeWidth);
     }
 
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
+    public void setBorderLineLength(int borderLineLength) {
+        mViewFinderView.setBorderLineLength(borderLineLength);
     }
 
+    public void setDrawLaser(boolean drawLaser) {
+        mDrawLaser = drawLaser;
+    }
+
+    // #AARRGGBB
+    public void setLaserColor(String laserColor) {
+        mViewFinderView.setLaserColor(Color.parseColor(laserColor));
+    }
+
+    public void setTorchMode(String torchMode) {
+        mTorchMode = torchMode;
+        setFlash(torchModeIsEnabled());
+    }
+
+    public boolean torchModeIsEnabled() {
+        return mTorchMode.equals("on");
+    }
+
+    public int getCameraId() {
+        return mCameraId;
+    }
+
+    // front, back
+    public void setCameraType(String type) {
+        if (mPrevCameraType.equals(type)) return;
+
+        stopCamera();
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        mCameraId = -1;
+        for (int cameraId = 0; cameraId < Camera.getNumberOfCameras(); cameraId++) {
+            Camera.getCameraInfo(cameraId, cameraInfo);
+            if (type.equals("back") && cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                mCameraId = cameraId;
+                break;
+            }
+            if (type.equals("front") && cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                mCameraId = cameraId;
+                break;
+            }
+        }
+        startCamera(mCameraId);
+        if (type.equals("back")) {
+            setFlash(torchModeIsEnabled());
+        }
+        mPrevCameraType = type;
+    }
+
+    @Override
+    public void handleResult(Result result) {
+        WritableMap event = Arguments.createMap();
+        event.putString("data", result.getText());
+        event.putString("type", result.getBarcodeFormat().toString());
+        ReactContext reactContext = (ReactContext)getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                getId(),
+                "topChange",
+                event);
+
+        startCamera(mCameraId);
+        setFlash(torchModeIsEnabled());
+    }
 }

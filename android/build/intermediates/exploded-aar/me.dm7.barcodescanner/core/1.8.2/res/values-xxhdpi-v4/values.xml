@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Users/dushyanth/Development/android_work/barcodescanner/core/src/main/res/values-xxhdpi/strings.xml -->
+    <eat-comment/>
+    <integer name="viewfinder_border_length">100</integer>
+    <integer name="viewfinder_border_width">6</integer>
+</resources>

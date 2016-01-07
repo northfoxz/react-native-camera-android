@@ -51,13 +51,13 @@ var CameraViewAndroid = React.createClass({
     );
   },
   render: function() {
-    return <RNCameraViewAndroid ref={WEBVIEW_REF} {...this.props} onNavigationStateChange={this._onNavigationStateChange} />;
+    return <RNCameraView ref={WEBVIEW_REF} {...this.props} onNavigationStateChange={this._onNavigationStateChange} />;
   },
   _getWebViewHandle: function() {
     return React.findNodeHandle(this.refs[WEBVIEW_REF]);
   },
 });
 
-var RNCameraViewAndroid = requireNativeComponent('RNCameraViewAndroid', null);
+var RNCameraView= requireNativeComponent('RNCameraView', null);
 
 module.exports = CameraViewAndroid;

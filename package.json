@@ -1,0 +1,19 @@
+{
+  "name": "react-native-camera-android",
+  "version": "1.0.0",
+  "description": "React native camera view",
+  "main": "index.android.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NorthFoxz/react-native-camera-android.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NorthFoxz/react-native-camera-android/issues"
+  },
+  "homepage": "https://github.com/NorthFoxz/react-native-camera-android#readme"
+}

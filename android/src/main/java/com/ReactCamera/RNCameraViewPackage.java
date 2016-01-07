@@ -1,12 +1,13 @@
 package com.ReactCamera;
-
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 public class RNCameraViewPackage implements ReactPackage {
@@ -22,6 +23,6 @@ public class RNCameraViewPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return new RNCameraViewManager();
+        return Arrays.<ViewManager>asList(new RNCameraViewManager());
     }
 }
