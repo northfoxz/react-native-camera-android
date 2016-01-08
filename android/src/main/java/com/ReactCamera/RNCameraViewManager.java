@@ -1,9 +1,13 @@
 package com.ReactCamera;
 
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
+
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -11,6 +15,7 @@ public class RNCameraViewManager extends ViewGroupManager<RNCameraView> implemen
 
     private static final String REACT_CLASS = "RNCameraView";
 
+    public static final int TAKE_PICTURE = 1;
     private static final String DEFAULT_VIEWFINDER_BACKGROUND_COLOR = "#60000000";
     private static final String DEFAULT_VIEWFINDER_BORDER_COLOR = "#ffffffff";
     private static final int DEFAULT_VIEWFINDER_BORDER_WIDTH = 4;
@@ -85,6 +90,24 @@ public class RNCameraViewManager extends ViewGroupManager<RNCameraView> implemen
     }
 
     @Override
+    public @Nullable
+    Map<String, Integer> getCommandsMap() {
+        return MapBuilder.of("takePicture", TAKE_PICTURE);
+    }
+
+    @Override
+    public void receiveCommand(
+            RNCameraView root,
+            int commandId,
+            @Nullable ReadableArray args) {
+        switch (commandId) {
+            case TAKE_PICTURE:
+                root.takePicture();
+                break;
+        }
+    }
+
+    @Override
     public RNCameraView createViewInstance(ThemedReactContext context) {
         context.addLifecycleEventListener(this);
         mCameraView = new RNCameraView(context);
@@ -96,7 +119,6 @@ public class RNCameraViewManager extends ViewGroupManager<RNCameraView> implemen
         mCameraView.setLaserColor(DEFAULT_VIEWFINDER_LASER_COLOR);
         mCameraView.setCameraType(DEFAULT_CAMERA_TYPE);
         mCameraView.setTorchMode(DEFAULT_TORCH_MODE);
-        mCameraView.toggleFlash();
         mCameraViewVisible = true;
         return mCameraView;
     }

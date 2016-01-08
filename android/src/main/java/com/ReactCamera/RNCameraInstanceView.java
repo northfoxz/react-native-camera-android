@@ -3,10 +3,21 @@ package com.ReactCamera;
 import android.content.Context;
 import android.graphics.Rect;
 import android.hardware.Camera;
+import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import me.dm7.barcodescanner.core.CameraPreview;
 import me.dm7.barcodescanner.core.CameraUtils;
@@ -149,5 +160,68 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
             this.mPreview.setAutoFocus(state);
         }
 
+    }
+
+    public void takePicture() {
+        // get an image from the camera
+        mCamera.takePicture(null, null, mPicture);
+    }
+    /**
+     * Picture Callback for handling a picture capture and saving it out to a file.
+     */
+    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+
+            File pictureFile = getOutputMediaFile();
+            if (pictureFile == null){
+                // Take picture android error;
+//                Toast.makeText(getActivity(), "Image retrieval failed.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(data);
+                fos.close();
+                Log.v("camera", "capture success");
+
+                // Restart the camera preview.
+//                safeCameraOpenInView(mCameraView);
+            } catch (FileNotFoundException e) {
+                Log.v("camera", "it's null");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.v("camera", "it's null");
+                e.printStackTrace();
+            }
+        }
+    };
+
+    /**
+     * Used to return the camera File output.
+     * @return
+     */
+    private File getOutputMediaFile(){
+
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "RNCameraAndroid");
+
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                Log.d("Camera Guide", "Required media storage does not exist");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                "IMG_"+ timeStamp + ".jpg");
+        Log.v("camera", mediaStorageDir.getPath() + File.separator +
+                "IMG_"+ timeStamp + ".jpg");
+        return mediaFile;
     }
 }

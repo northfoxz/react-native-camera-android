@@ -5,10 +5,12 @@
 
 var React = require('react-native');
 var {
-  NativeModules,
   PropTypes,
   requireNativeComponent,
+  UIManager
 } = React;
+
+var RN_CAMERA_REF = 'cameraview';
 
 class CameraView extends React.Component {
   constructor() {
@@ -27,17 +29,30 @@ class CameraView extends React.Component {
     });
   }
 
-  toggleFlashLight() {
-    NativeModules.RNCameraView.toggleFlashLight();
+  receiveImage() {
+    
   }
 
   render() {
     return (
       <RNCameraView
         {...this.props}
+        ref={RN_CAMERA_REF}
         onChange={this.onChange}
       />
     );
+  }
+
+  takePicture() {
+    UIManager.dispatchViewManagerCommand(
+      this._getCameraLayoutHandle(),
+      UIManager.RNCameraView.Commands.takePicture,
+      null
+    );
+  }
+
+  _getCameraLayoutHandle() {
+    return React.findNodeHandle(this.refs[RN_CAMERA_REF]);
   }
 }
 

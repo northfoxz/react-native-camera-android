@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.zxing.Result;
@@ -124,11 +123,6 @@ public class RNCameraView extends RNCameraComponentView implements RNCameraCompo
         }
         mPrevCameraType = type;
     }
-    
-    @ReactMethod
-    public void toggleFlashLight(RNCameraView view) {
-        view.toggleFlash();
-    }
 
     @Override
     public void handleResult(Result result) {
@@ -147,4 +141,6 @@ public class RNCameraView extends RNCameraComponentView implements RNCameraCompo
         startCamera(mCameraId);
         setFlash(torchModeIsEnabled());
     }
+
+
 }
