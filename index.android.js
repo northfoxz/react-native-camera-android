@@ -4,36 +4,47 @@
 'use strict';
 
 var React = require('react-native');
+var Subscribable = require('Subscribable');
 var {
   PropTypes,
   requireNativeComponent,
-  UIManager
+  UIManager,
+  DeviceEventEmitter
 } = React;
 
 var RN_CAMERA_REF = 'cameraview';
 
-class CameraView extends React.Component {
-  constructor() {
-    super();
-    this.onChange = this.onChange.bind(this);
-  }
+var CameraView = React.createClass({
+  mixins: [Subscribable.Mixin],
 
-  onChange(event) {
-    if (!this.props.onBarCodeRead) {
-      return;
-    }
+  onChange: function(event) {
+    if (!this.props.onBarCodeRead) return;
 
     this.props.onBarCodeRead({
       type: event.nativeEvent.type,
       data: event.nativeEvent.data,
     });
-  }
+  },
 
-  receiveImage() {
-    
-  }
+  onPictureTaken: function(event) {
+    console.log(event);
+    if (!this.props.onPictureTaken) return;
 
-  render() {
+    this.props.onPictureTaken({
+      type: event.type,
+      message: event.message
+    })
+  },
+
+  componentWillMount: function() {
+    this.addListenerOn(
+      DeviceEventEmitter,
+      'cameraResult',
+      this.onPictureTaken
+    );
+  },
+
+  render: function() {
     return (
       <RNCameraView
         {...this.props}
@@ -41,20 +52,20 @@ class CameraView extends React.Component {
         onChange={this.onChange}
       />
     );
-  }
+  },
 
-  takePicture() {
+  takePicture: function() {
     UIManager.dispatchViewManagerCommand(
       this._getCameraLayoutHandle(),
       UIManager.RNCameraView.Commands.takePicture,
       null
     );
-  }
+  },
 
-  _getCameraLayoutHandle() {
+  _getCameraLayoutHandle: function() {
     return React.findNodeHandle(this.refs[RN_CAMERA_REF]);
   }
-}
+})
 
 CameraView.propTypes = {
   viewFinderBackgroundColor: PropTypes.string,
@@ -75,7 +86,8 @@ CameraView.propTypes = {
   accessibilityLabel: PropTypes.string,
   testID: PropTypes.string,
   renderToHardwareTextureAndroid: PropTypes.string,
-  onLayout: PropTypes.bool
+  onLayout: PropTypes.bool,
+  onPictureTaken: PropTypes.func
 };
 
 var RNCameraView = requireNativeComponent('RNCameraView', CameraView, {

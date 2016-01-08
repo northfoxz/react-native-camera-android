@@ -186,14 +186,15 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
                 fos.write(data);
                 fos.close();
                 Log.v("camera", "capture success");
+                returnPictureTakenResult("success", pictureFile.getAbsolutePath());
 
                 // Restart the camera preview.
 //                safeCameraOpenInView(mCameraView);
             } catch (FileNotFoundException e) {
-                Log.v("camera", "it's null");
+                returnPictureTakenResult("error", "file not found");
                 e.printStackTrace();
             } catch (IOException e) {
-                Log.v("camera", "it's null");
+                returnPictureTakenResult("error", "an exception error");
                 e.printStackTrace();
             }
         }
@@ -223,5 +224,9 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
         Log.v("camera", mediaStorageDir.getPath() + File.separator +
                 "IMG_"+ timeStamp + ".jpg");
         return mediaFile;
+    }
+
+    public void returnPictureTakenResult(String resultType, String resultMessage) {
+
     }
 }

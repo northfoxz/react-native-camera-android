@@ -5,11 +5,14 @@ package com.ReactCamera;
 // (powered by Fernflower decompiler)
 //
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.hardware.Camera;
-import android.util.AttributeSet;
+import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.uimanager.ThemedReactContext;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -31,15 +34,23 @@ public class RNCameraComponentView extends RNCameraInstanceView {
     public static final List<BarcodeFormat> ALL_FORMATS = new ArrayList();
     private List<BarcodeFormat> mFormats;
     private RNCameraComponentView.ResultHandler mResultHandler;
+    private ThemedReactContext mContext;
 
-    public RNCameraComponentView(Context context) {
+    public RNCameraComponentView(ThemedReactContext context) {
         super(context);
+        mContext = context;
         this.initMultiFormatReader();
     }
 
-    public RNCameraComponentView(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet);
-        this.initMultiFormatReader();
+    @Override
+    public void returnPictureTakenResult(String resultType, String resultMessage) {
+        Log.v("camera", "there you go");
+        WritableMap params = Arguments.createMap();
+        params.putString("type", resultType);
+        params.putString("message", resultMessage);
+        mContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("cameraResult", params);
     }
 
     public void setFormats(List<BarcodeFormat> formats) {
