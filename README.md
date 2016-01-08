@@ -24,7 +24,7 @@ project(':ReactNativeCameraAndroid').projectDir = new File(rootProject.projectDi
 * register module (in MainActivity.java)
 
 ```java
-import import com.ReactCamera.RNCameraViewPackage;  // <--- import
+import com.ReactCamera.RNCameraViewPackage;  // <--- import
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
   ......
@@ -53,3 +53,28 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 
 }
 ```
+
+## Usage
+
+All you need is to `require` the `react-native-camera-android` module and then use the
+`<Camera/>` tag.
+
+## Actions
+
+#### `takePicture`
+
+1. First add refs tag to your camera: `<Camera ref="cam" />`
+2. Then call the function `this.refs.cam.takePicture()`
+
+
+
+## Properties
+
+#### `onPictureTaken`
+
+After the picture is taken, the `<Camera />` component will return an event to `onPictureTaken`, which contains following data payloads.
+
+`onPictureTaken = function(event) {} `
+
+1. `type`: `success` or `error`
+2. `message`: the result of the callback
