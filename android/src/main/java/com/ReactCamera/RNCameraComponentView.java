@@ -7,7 +7,6 @@ package com.ReactCamera;
 
 import android.graphics.Rect;
 import android.hardware.Camera;
-import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -44,7 +43,6 @@ public class RNCameraComponentView extends RNCameraInstanceView {
 
     @Override
     public void returnPictureTakenResult(String resultType, String resultMessage) {
-        Log.v("camera", "there you go");
         WritableMap params = Arguments.createMap();
         params.putString("type", resultType);
         params.putString("message", resultMessage);

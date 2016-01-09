@@ -16,6 +16,7 @@ public class RNCameraViewManager extends ViewGroupManager<RNCameraView> implemen
     private static final String REACT_CLASS = "RNCameraView";
 
     public static final int TAKE_PICTURE = 1;
+    private static final boolean DEFAULT_VIEWFINDER_DISPLAY = false;
     private static final String DEFAULT_VIEWFINDER_BACKGROUND_COLOR = "#60000000";
     private static final String DEFAULT_VIEWFINDER_BORDER_COLOR = "#ffffffff";
     private static final int DEFAULT_VIEWFINDER_BORDER_WIDTH = 4;
@@ -31,6 +32,13 @@ public class RNCameraViewManager extends ViewGroupManager<RNCameraView> implemen
     @Override
     public String getName() {
         return REACT_CLASS;
+    }
+
+    @ReactProp(name = "viewFinderDisplay")
+    public void setViewFinderDisplay(RNCameraView view, @Nullable Boolean viewFinderDisplay) {
+        if(viewFinderDisplay !=  null) {
+            view.setViewFinderDisplay(viewFinderDisplay);
+        }
     }
 
     @ReactProp(name = "viewFinderBackgroundColor")

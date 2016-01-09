@@ -1,15 +1,19 @@
 package com.ReactCamera;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Environment;
-import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+
+import com.facebook.react.uimanager.ThemedReactContext;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 import me.dm7.barcodescanner.core.CameraPreview;
 import me.dm7.barcodescanner.core.CameraUtils;
@@ -29,33 +32,42 @@ import me.dm7.barcodescanner.core.ViewFinderView;
  */
 public abstract class RNCameraInstanceView extends FrameLayout implements Camera.PreviewCallback {
     private Camera mCamera;
+    private RelativeLayout mCameraView;
     private CameraPreview mPreview;
     private IViewFinder mViewFinderView;
     private Rect mFramingRectInPreview;
+    private ThemedReactContext mContext;
+    private boolean mViewFinderDisplay;
 
-    public RNCameraInstanceView(Context context) {
+    public RNCameraInstanceView(ThemedReactContext context) {
         super(context);
-        this.setupLayout();
-    }
-
-    public RNCameraInstanceView(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet);
+        mContext = context;
         this.setupLayout();
     }
 
     public final void setupLayout() {
         this.mPreview = new CameraPreview(this.getContext());
-        RelativeLayout relativeLayout = new RelativeLayout(this.getContext());
-        relativeLayout.setGravity(17);
-        relativeLayout.setBackgroundColor(-16777216);
-        relativeLayout.addView(this.mPreview);
-        this.addView(relativeLayout);
+        RelativeLayout mCameraView = new RelativeLayout(this.getContext());
+        mCameraView.setGravity(17);
+        mCameraView.setBackgroundColor(-16777216);
+        mCameraView.addView(this.mPreview);
+        this.addView(mCameraView);
         this.mViewFinderView = this.createViewFinderView(this.getContext());
         if(this.mViewFinderView instanceof View) {
-            this.addView((View)this.mViewFinderView);
+            if(mViewFinderDisplay)
+                this.addView((View)this.mViewFinderView);
         } else {
             throw new IllegalArgumentException("IViewFinder object returned by \'createViewFinderView()\' should be instance of android.view.View");
         }
+    }
+
+    public void setViewFinderDisplay(boolean display) {
+        if(display) {
+            Log.w("camera", "setting view finder display as true");
+            this.addView((View)this.mViewFinderView);
+        }else
+            Log.w("camera", "setting view finder display as false");
+        mViewFinderDisplay = display;
     }
 
     protected IViewFinder createViewFinderView(Context context) {
@@ -65,19 +77,20 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
     public void startCamera(int cameraId) {
         this.startCamera(CameraUtils.getCameraInstance(cameraId));
     }
-
+    public void startCamera() {
+        this.startCamera(CameraUtils.getCameraInstance());
+    }
     public void startCamera(Camera camera) {
         this.mCamera = camera;
         if(this.mCamera != null) {
             this.mViewFinderView.setupViewFinder();
             this.mPreview.setCamera(this.mCamera, this);
+            Camera.Parameters parameters = mCamera.getParameters();
+            parameters.set("orientation", "portrait");
+            mCamera.setParameters(parameters);
             this.mPreview.initCameraPreview();
         }
 
-    }
-
-    public void startCamera() {
-        this.startCamera(CameraUtils.getCameraInstance());
     }
 
     public void stopCamera() {
@@ -176,20 +189,20 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
 
             File pictureFile = getOutputMediaFile();
             if (pictureFile == null){
-                // Take picture android error;
-//                Toast.makeText(getActivity(), "Image retrieval failed.", Toast.LENGTH_SHORT).show();
+                returnPictureTakenResult("error", "directory error");
+                mCamera.startPreview();
                 return;
             }
 
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
+//                Log.v("camera", FileOutputStream.getFileStreamPath(pictureFile.getName()));
                 fos.write(data);
                 fos.close();
-                Log.v("camera", "capture success");
-                returnPictureTakenResult("success", pictureFile.getAbsolutePath());
 
                 // Restart the camera preview.
-//                safeCameraOpenInView(mCameraView);
+                returnPictureTakenResult("success", pictureFile.getAbsolutePath());
+//                mCamera.startPreview();
             } catch (FileNotFoundException e) {
                 returnPictureTakenResult("error", "file not found");
                 e.printStackTrace();
@@ -205,25 +218,40 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
      * @return
      */
     private File getOutputMediaFile(){
+        try {
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "RNCameraAndroid");
+            // Create a media file name
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String root = Environment.getExternalStorageDirectory().toString();
+            File myDir = new File(root + "/rncamera");
+            myDir.mkdirs();
+            if(myDir.exists())
+                Log.v("camera", "directory created");
+            else
+                Log.v("camera", "directory still not created");
+            File mediaFile;
+            mediaFile = new File(myDir, "IMG_"+ timeStamp + ".jpg");
+            mediaFile.createNewFile( );
+            if(mediaFile.exists())
+                Log.v("camera", "file created now");
+            else
+                Log.v("camera", "file still not created");
 
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("Camera Guide", "Required media storage does not exist");
-                return null;
-            }
+            if(mediaFile.isDirectory())
+                Log.v("camera", "is directory");
+            else
+                Log.v("camera", "is file");
+            Log.v("camera", mediaFile.getAbsolutePath());
+            return mediaFile;
         }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
-        Log.v("camera", mediaStorageDir.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
-        return mediaFile;
+        catch(SecurityException e) {
+            Log.v("camera", e.getMessage());
+            return null;
+        }
+        catch(IOException e) {
+            Log.v("camera", e.getMessage());
+            return null;
+        }
     }
 
     public void returnPictureTakenResult(String resultType, String resultMessage) {

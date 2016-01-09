@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -30,17 +31,20 @@ public class RNCameraView extends RNCameraComponentView implements RNCameraCompo
 
     @Override
     protected IViewFinder createViewFinderView(Context context) {
+
         if (mDrawLaser) {
+            Log.w("camera", "drawLaser set to true");
             mViewFinderView = new ViewFinderView(context);
         }
         else {
+            Log.w("camera", "drawLaser set to false");
             mViewFinderView = new CustomViewFinderView(context);
         }
-
         return mViewFinderView;
     }
 
     private static class CustomViewFinderView extends ViewFinderView {
+
         public CustomViewFinderView(Context context) {
             super(context);
         }
@@ -51,6 +55,7 @@ public class RNCameraView extends RNCameraComponentView implements RNCameraCompo
 
         @Override
         public void onDraw(Canvas canvas) {
+            Log.w("camera", "drawing custom view finder view");
             if(getFramingRect() == null) {
                 return;
             }
@@ -59,6 +64,7 @@ public class RNCameraView extends RNCameraComponentView implements RNCameraCompo
             drawViewFinderBorder(canvas);
         }
     }
+
 
     // #AARRGGBB
     public void setMaskColor(String maskColor) {

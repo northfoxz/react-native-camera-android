@@ -68,6 +68,7 @@ var CameraView = React.createClass({
 })
 
 CameraView.propTypes = {
+  viewFinderDisplay: PropTypes.bool,
   viewFinderBackgroundColor: PropTypes.string,
   viewFinderBorderColor: PropTypes.string,
   viewFinderBorderWidth: PropTypes.number,
