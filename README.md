@@ -5,6 +5,10 @@ React native camera view
 #####https://github.com/lwansbrough/react-native-camera
 #####https://github.com/ideacreation/react-native-barcodescanner
 
+![](http://i.imgur.com/xQBGMIs.jpg)
+
+![](http://i.imgur.com/TwhSRg6.jpg)
+
 ### Installation
 
 ```bash

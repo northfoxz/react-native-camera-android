@@ -54,8 +54,7 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
         this.addView(mCameraView);
         this.mViewFinderView = this.createViewFinderView(this.getContext());
         if(this.mViewFinderView instanceof View) {
-            if(mViewFinderDisplay)
-                this.addView((View)this.mViewFinderView);
+
         } else {
             throw new IllegalArgumentException("IViewFinder object returned by \'createViewFinderView()\' should be instance of android.view.View");
         }
@@ -85,9 +84,24 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
         if(this.mCamera != null) {
             this.mViewFinderView.setupViewFinder();
             this.mPreview.setCamera(this.mCamera, this);
-            Camera.Parameters parameters = mCamera.getParameters();
-            parameters.set("orientation", "portrait");
-            mCamera.setParameters(parameters);
+
+            //STEP #1: Get rotation degrees
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
+            int rotation = 0;
+            int degrees = 0;
+            switch (rotation) {
+                case Surface.ROTATION_0: degrees = 0; break; //Natural orientation
+                case Surface.ROTATION_90: degrees = 90; break; //Landscape left
+                case Surface.ROTATION_180: degrees = 180; break;//Upside down
+                case Surface.ROTATION_270: degrees = 270; break;//Landscape right
+            }
+            int rotate = (info.orientation - degrees + 360) % 360;
+
+//STEP #2: Set the 'rotation' parameter
+            Camera.Parameters params = mCamera.getParameters();
+            params.setRotation(rotate);
+            mCamera.setParameters(params);
             this.mPreview.initCameraPreview();
         }
 

@@ -1,95 +1,31 @@
 0 info it worked if it ends with ok
 1 verbose cli [ '/Users/northfoxz/.nvm/versions/node/v5.1.0/bin/node',
 1 verbose cli   '/Users/northfoxz/.nvm/versions/node/v5.1.0/bin/npm',
-1 verbose cli   'publish' ]
+1 verbose cli   'version',
+1 verbose cli   '1.0.3' ]
 2 info using npm@3.3.12
 3 info using node@v5.1.0
-4 verbose publish [ '.' ]
-5 silly cache add args [ '.', null ]
-6 verbose cache add spec .
-7 silly cache add parsed spec Result {
-7 silly cache add   raw: '.',
-7 silly cache add   scope: null,
-7 silly cache add   name: null,
-7 silly cache add   rawSpec: '.',
-7 silly cache add   spec: '/Users/northfoxz/Documents/TIL/reactnative/whatsthis/node_modules/react-native-camera-android',
-7 silly cache add   type: 'directory' }
-8 verbose addLocalDirectory /Users/northfoxz/.npm/react-native-camera-android/1.0.0/package.tgz not in flight; packing
-9 info lifecycle react-native-camera-android@1.0.0~prepublish: react-native-camera-android@1.0.0
-10 silly lifecycle react-native-camera-android@1.0.0~prepublish: no script for prepublish, continuing
-11 verbose tar pack [ '/Users/northfoxz/.npm/react-native-camera-android/1.0.0/package.tgz',
-11 verbose tar pack   '/Users/northfoxz/Documents/TIL/reactnative/whatsthis/node_modules/react-native-camera-android' ]
-12 verbose tarball /Users/northfoxz/.npm/react-native-camera-android/1.0.0/package.tgz
-13 verbose folder /Users/northfoxz/Documents/TIL/reactnative/whatsthis/node_modules/react-native-camera-android
-14 verbose addLocalTarball adding from inside cache /Users/northfoxz/.npm/react-native-camera-android/1.0.0/package.tgz
-15 silly cache afterAdd react-native-camera-android@1.0.0
-16 verbose afterAdd /Users/northfoxz/.npm/react-native-camera-android/1.0.0/package/package.json not in flight; writing
-17 verbose afterAdd /Users/northfoxz/.npm/react-native-camera-android/1.0.0/package/package.json written
-18 silly publish { name: 'react-native-camera-android',
-18 silly publish   version: '1.0.0',
-18 silly publish   description: 'React native camera view',
-18 silly publish   main: 'index.android.js',
-18 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
-18 silly publish   repository:
-18 silly publish    { type: 'git',
-18 silly publish      url: 'git+https://github.com/NorthFoxz/react-native-camera-android.git' },
-18 silly publish   author: '',
-18 silly publish   license: 'MIT',
-18 silly publish   bugs: { url: 'https://github.com/NorthFoxz/react-native-camera-android/issues' },
-18 silly publish   homepage: 'https://github.com/NorthFoxz/react-native-camera-android#readme',
-18 silly publish   readme: '# react-native-camera-android\nReact native camera view\n\n###A react native camera component inspired by\n#####https://github.com/lwansbrough/react-native-camera\n#####https://github.com/ideacreation/react-native-barcodescanner\n\n### Installation\n\n```bash\nnpm i --save react-native-camera-android\n```\n\n### Add it to your android project\n\n* In `android/setting.gradle`\n\n```gradle\n...\ninclude \':ReactNativeCameraAndroid\', \':app\'\nproject(\':ReactNativeCameraAndroid\').projectDir = new File(rootProject.projectDir, \'../node_modules/react-native-camera-android/android\')\n```\n\n* register module (in MainActivity.java)\n\n```java\nimport import com.ReactCamera.RNCameraViewPackage;  // <--- import\n\npublic class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {\n  ......\n\n  @Override\n  protected void onCreate(Bundle savedInstanceState) {\n    super.onCreate(savedInstanceState);\n    mReactRootView = new ReactRootView(this);\n\n    mReactInstanceManager = ReactInstanceManager.builder()\n      .setApplication(getApplication())\n      .setBundleAssetName("index.android.bundle")\n      .setJSMainModuleName("index.android")\n      .addPackage(new MainReactPackage())\n      .addPackage(new ReactCameraPackage())              // <------ add here\n      .setUseDeveloperSupport(BuildConfig.DEBUG)\n      .setInitialLifecycleState(LifecycleState.RESUMED)\n      .build();\n\n    mReactRootView.startReactApplication(mReactInstanceManager, "ExampleRN", null);\n\n    setContentView(mReactRootView);\n  }\n\n  ......\n\n}\n```',
-18 silly publish   readmeFilename: 'README.md',
-18 silly publish   gitHead: 'e33efbc540948ad71142486d59979c00264cad49',
-18 silly publish   _id: 'react-native-camera-android@1.0.0',
-18 silly publish   _shasum: '207d14c46178f7fc6c5730be82025c5153b766b2',
-18 silly publish   _from: '.' }
-19 verbose getPublishConfig undefined
-20 silly mapToRegistry name react-native-camera-android
-21 silly mapToRegistry using default registry
-22 silly mapToRegistry registry https://registry.npmjs.org/
-23 silly mapToRegistry uri https://registry.npmjs.org/react-native-camera-android
-24 verbose publish registryBase https://registry.npmjs.org/
-25 silly publish uploading /Users/northfoxz/.npm/react-native-camera-android/1.0.0/package.tgz
-26 verbose request uri https://registry.npmjs.org/react-native-camera-android
-27 verbose request sending authorization for write operation
-28 info attempt registry request try #1 at 00:36:02
-29 verbose request using bearer token for auth
-30 verbose request id 4ffab26b8d4e3b7a
-31 http request PUT https://registry.npmjs.org/react-native-camera-android
-32 http 403 https://registry.npmjs.org/react-native-camera-android
-33 verbose headers { 'content-type': 'application/json',
-33 verbose headers   'cache-control': 'max-age=300',
-33 verbose headers   'content-length': '95',
-33 verbose headers   'accept-ranges': 'bytes',
-33 verbose headers   date: 'Fri, 08 Jan 2016 16:36:17 GMT',
-33 verbose headers   via: '1.1 varnish',
-33 verbose headers   connection: 'keep-alive',
-33 verbose headers   'x-served-by': 'cache-hkg6826-HKG',
-33 verbose headers   'x-cache': 'MISS',
-33 verbose headers   'x-cache-hits': '0',
-33 verbose headers   'x-timer': 'S1452270963.404746,VS0,VE13810' }
-34 verbose request invalidating /Users/northfoxz/.npm/registry.npmjs.org/react-native-camera-android on PUT
-35 error publish Failed PUT 403
-36 verbose stack Error: "You cannot publish over the previously published version 1.0.0." : react-native-camera-android
-36 verbose stack     at makeError (/Users/northfoxz/.nvm/versions/node/v5.1.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
-36 verbose stack     at CachingRegistryClient.<anonymous> (/Users/northfoxz/.nvm/versions/node/v5.1.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
-36 verbose stack     at Request._callback (/Users/northfoxz/.nvm/versions/node/v5.1.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
-36 verbose stack     at Request.self.callback (/Users/northfoxz/.nvm/versions/node/v5.1.0/lib/node_modules/npm/node_modules/request/request.js:198:22)
-36 verbose stack     at emitTwo (events.js:87:13)
-36 verbose stack     at Request.emit (events.js:172:7)
-36 verbose stack     at Request.<anonymous> (/Users/northfoxz/.nvm/versions/node/v5.1.0/lib/node_modules/npm/node_modules/request/request.js:1082:10)
-36 verbose stack     at emitOne (events.js:82:20)
-36 verbose stack     at Request.emit (events.js:169:7)
-36 verbose stack     at IncomingMessage.<anonymous> (/Users/northfoxz/.nvm/versions/node/v5.1.0/lib/node_modules/npm/node_modules/request/request.js:1009:12)
-37 verbose statusCode 403
-38 verbose pkgid react-native-camera-android
-39 verbose cwd /Users/northfoxz/Documents/TIL/reactnative/whatsthis/node_modules/react-native-camera-android
-40 error Darwin 15.0.0
-41 error argv "/Users/northfoxz/.nvm/versions/node/v5.1.0/bin/node" "/Users/northfoxz/.nvm/versions/node/v5.1.0/bin/npm" "publish"
-42 error node v5.1.0
-43 error npm  v3.3.12
-44 error code E403
-45 error "You cannot publish over the previously published version 1.0.0." : react-native-camera-android
-46 error If you need help, you may report this error at:
-46 error     <https://github.com/npm/npm/issues>
-47 verbose exit [ 1, true ]
+4 info git [ 'status', '--porcelain' ]
+5 verbose stack Error: Git working directory not clean.
+5 verbose stack D npm-debug.log
+5 verbose stack M package.json
+5 verbose stack     at /Users/northfoxz/.nvm/versions/node/v5.1.0/lib/node_modules/npm/lib/version.js:172:21
+5 verbose stack     at ChildProcess.exithandler (child_process.js:204:7)
+5 verbose stack     at emitTwo (events.js:87:13)
+5 verbose stack     at ChildProcess.emit (events.js:172:7)
+5 verbose stack     at maybeClose (internal/child_process.js:818:16)
+5 verbose stack     at Socket.<anonymous> (internal/child_process.js:319:11)
+5 verbose stack     at emitOne (events.js:77:13)
+5 verbose stack     at Socket.emit (events.js:169:7)
+5 verbose stack     at Pipe._onclose (net.js:469:12)
+6 verbose cwd /Users/northfoxz/Documents/TIL/reactnative/whatsthis/node_modules/react-native-camera-android
+7 error Darwin 15.0.0
+8 error argv "/Users/northfoxz/.nvm/versions/node/v5.1.0/bin/node" "/Users/northfoxz/.nvm/versions/node/v5.1.0/bin/npm" "version" "1.0.3"
+9 error node v5.1.0
+10 error npm  v3.3.12
+11 error Git working directory not clean.
+11 error D npm-debug.log
+11 error M package.json
+12 error If you need help, you may report this error at:
+12 error     <https://github.com/npm/npm/issues>
+13 verbose exit [ 1, true ]
