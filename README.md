@@ -5,9 +5,9 @@ React native camera view for android. Enabling you to take pictures directly on 
 #####https://github.com/lwansbrough/react-native-camera
 #####https://github.com/ideacreation/react-native-barcodescanner
 
-![](http://i.imgur.com/xQBGMIs.jpg =150x)
+![](http://imgur.com/WgleJwy.jpg)
 
-![](http://i.imgur.com/TwhSRg6.jpg =150x)
+![](http://imgur.com/2JKwojj.jpg =150x)
 
 ### Installation
 
