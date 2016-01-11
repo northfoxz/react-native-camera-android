@@ -1,5 +1,5 @@
 # react-native-camera-android
-React native camera view
+React native camera view for android. Enabling you to take pictures directly on camera view, controlling flash light of the device, and also reading barcode from camera.
 
 ###A react native camera component inspired by
 #####https://github.com/lwansbrough/react-native-camera
