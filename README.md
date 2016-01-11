@@ -60,6 +60,42 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 }
 ```
 
+## Example
+```javascript
+var Camera = require('react-native-camera-android');
+
+var Example = React.createClass({
+
+  render() {
+    return (
+      <BarcodeScanner
+        ref="cam"
+        torchMode={"off"}
+        cameraType={"back"}
+        viewFinderDisplay={true}
+        onBarCodeRead={this._barcodeReceived}
+      />
+    );
+  }
+
+  _takePicture() {
+    this.refs.cam.takePicture();
+  }
+
+  _barcodeReceived(event) {
+    console.log('Barcode: ' + e.data);
+    console.log('Type: ' + e.type);
+  }
+
+  _onPictureTaken(event) {
+    if(event.type !== 'error') {
+      console.log("file://" + event.message)
+    }
+  }
+
+});
+```
+
 ## Usage
 
 All you need is to `require` the `react-native-camera-android` module and then use the
