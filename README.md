@@ -25,6 +25,16 @@ include ':ReactNativeCameraAndroid', ':app'
 project(':ReactNativeCameraAndroid').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera-android/android')
 ```
 
+* In `android/app/build.gradle`
+
+```
+dependencies {
+  ...
+  ...
+  compile project(':react-native-camera-android')
+}
+```
+
 * register module (in MainActivity.java)
 
 ```java

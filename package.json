@@ -1,6 +1,6 @@
 {
   "name": "react-native-camera-android",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "React native camera view for android",
   "main": "index.android.js",
   "scripts": {
