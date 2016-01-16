@@ -210,13 +210,12 @@ public abstract class RNCameraInstanceView extends FrameLayout implements Camera
 
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
-//                Log.v("camera", FileOutputStream.getFileStreamPath(pictureFile.getName()));
                 fos.write(data);
                 fos.close();
 
                 // Restart the camera preview.
                 returnPictureTakenResult("success", pictureFile.getAbsolutePath());
-//                mCamera.startPreview();
+                mCamera.startPreview();
             } catch (FileNotFoundException e) {
                 returnPictureTakenResult("error", "file not found");
                 e.printStackTrace();

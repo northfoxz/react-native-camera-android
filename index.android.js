@@ -76,7 +76,7 @@ CameraView.propTypes = {
   viewFinderDrawLaser: PropTypes.bool,
   viewFinderLaserColor: PropTypes.string,
   torchMode: PropTypes.string,
-  cameraType: PropTypes.string,
+  type: PropTypes.string,
   onBarCodeRead: PropTypes.func,
   rotation: PropTypes.number,
   scaleX: PropTypes.number,

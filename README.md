@@ -78,8 +78,8 @@ var Example = React.createClass({
     return (
       <BarcodeScanner
         ref="cam"
+        type={"back"}
         torchMode={"off"}
-        cameraType={"back"}
         viewFinderDisplay={true}
         onBarCodeRead={this._barcodeReceived}
       />
@@ -159,13 +159,13 @@ Values:
 
 Use the `torchMode` property to specify the camera torch mode.
 
-#### `cameraType`
+#### `type`
 
 Values:
 `back` (default),
 `front`
 
-Use the `cameraType` property to specify the camera to use. If you specify the front camera, but the device has no front camera the back camera is used.
+Use the `type` property to specify the camera to use. If you specify the front camera, but the device has no front camera the back camera is used.
 
 ### Viewfinder properties
 

@@ -83,7 +83,7 @@ public class RNCameraViewManager extends ViewGroupManager<RNCameraView> implemen
         }
     }
 
-    @ReactProp(name = "cameraType")
+    @ReactProp(name = "type")
     public void setCameraType(RNCameraView view, @Nullable String cameraType) {
         if (cameraType != null) {
             view.setCameraType(cameraType);
