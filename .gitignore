@@ -1,4 +1,5 @@
 .idea
 .gradle
-npm-debug.log
 .npmignore
+andoid/build/
+npm-debug.log

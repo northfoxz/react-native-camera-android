@@ -15,11 +15,11 @@ npm i --save react-native-camera-android
 
 ### Add it to your android project
 
-* In `android/setting.gradle`
+* In `android/settings.gradle`
 
 ```gradle
 ...
-include ':ReactNativeCameraAndroid', ':app'
+include ':ReactNativeCameraAndroid'
 project(':ReactNativeCameraAndroid').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera-android/android')
 ```
 
@@ -29,7 +29,7 @@ project(':ReactNativeCameraAndroid').projectDir = new File(rootProject.projectDi
 dependencies {
   ...
   ...
-  compile project(':react-native-camera-android')
+  compile project(':ReactNativeCameraAndroid')
 }
 ```
 
@@ -74,9 +74,9 @@ var Camera = require('react-native-camera-android');
 
 var Example = React.createClass({
 
-  render() {
+  render: function() {
     return (
-      <BarcodeScanner
+      <Camera
         ref="cam" // the reference of your camera view
         type={"back"} // the type of your camera
         autoFocus={true}
@@ -86,18 +86,18 @@ var Example = React.createClass({
         onPictureTaken={this._onPictureTaken}
       />
     );
-  }
+  },
 
-  _takePicture() {
+  _takePicture: function() {
     this.refs.cam.takePicture();
-  }
+  },
 
-  _barcodeReceived(event) {
+  _barcodeReceived: function(event) {
     console.log('Barcode: ' + e.data);
     console.log('Type: ' + e.type);
-  }
+  },
 
-  _onPictureTaken(event) {
+  _onPictureTaken: function(event) {
     if(event.type !== 'error') {
       console.log("file://" + event.message)
     }

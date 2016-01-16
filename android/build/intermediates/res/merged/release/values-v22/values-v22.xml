@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/northfoxz/Documents/TIL/reactnative/whatsthis/node_modules/react-native-camera-android/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-v22/values-v22.xml -->
+    <!-- From: file:/Users/northfoxz/Documents/TIL/reactnative/gitcamera/node_modules/react-native-camera-android/android/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values-v22/values-v22.xml -->
     <eat-comment/>
     <style name="Base.Theme.AppCompat" parent="Base.V22.Theme.AppCompat"/>
     <style name="Base.Theme.AppCompat.Light" parent="Base.V22.Theme.AppCompat.Light"/>
