@@ -68,6 +68,12 @@ var CameraView = React.createClass({
 })
 
 CameraView.propTypes = {
+  autoFocus: PropTypes.bool,
+  torchMode: PropTypes.string,
+  type: PropTypes.string,
+  onLayout: PropTypes.bool,
+  onBarCodeRead: PropTypes.func,
+  onPictureTaken: PropTypes.func,
   viewFinderDisplay: PropTypes.bool,
   viewFinderBackgroundColor: PropTypes.string,
   viewFinderBorderColor: PropTypes.string,
@@ -75,9 +81,6 @@ CameraView.propTypes = {
   viewFinderBorderLength: PropTypes.number,
   viewFinderDrawLaser: PropTypes.bool,
   viewFinderLaserColor: PropTypes.string,
-  torchMode: PropTypes.string,
-  type: PropTypes.string,
-  onBarCodeRead: PropTypes.func,
   rotation: PropTypes.number,
   scaleX: PropTypes.number,
   scaleY: PropTypes.number,
@@ -86,9 +89,7 @@ CameraView.propTypes = {
   importantForAccessibility: PropTypes.string,
   accessibilityLabel: PropTypes.string,
   testID: PropTypes.string,
-  renderToHardwareTextureAndroid: PropTypes.string,
-  onLayout: PropTypes.bool,
-  onPictureTaken: PropTypes.func
+  renderToHardwareTextureAndroid: PropTypes.string
 };
 
 var RNCameraView = requireNativeComponent('RNCameraView', CameraView, {

@@ -79,6 +79,7 @@ var Example = React.createClass({
       <BarcodeScanner
         ref="cam" // the reference of your camera view
         type={"back"} // the type of your camera
+        autoFocus={true}
         torchMode={"off"} // flashlight settings of your camera
         viewFinderDisplay={true} // set it to true if you want to scan barcodes
         onBarCodeRead={this._barcodeReceived}

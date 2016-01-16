@@ -97,6 +97,13 @@ public class RNCameraViewManager extends ViewGroupManager<RNCameraView> implemen
         }
     }
 
+    @ReactProp(name = "autoFocus")
+    public void setAutoFocus(RNCameraView view, @Nullable Boolean autoFocus) {
+        if (autoFocus != null) {
+            view.setAutoFocus(autoFocus);
+        }
+    }
+
     @Override
     public @Nullable
     Map<String, Integer> getCommandsMap() {
