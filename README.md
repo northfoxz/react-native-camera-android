@@ -77,11 +77,12 @@ var Example = React.createClass({
   render() {
     return (
       <BarcodeScanner
-        ref="cam"
-        type={"back"}
-        torchMode={"off"}
-        viewFinderDisplay={true}
+        ref="cam" // the reference of your camera view
+        type={"back"} // the type of your camera
+        torchMode={"off"} // flashlight settings of your camera
+        viewFinderDisplay={true} // set it to true if you want to scan barcodes
         onBarCodeRead={this._barcodeReceived}
+        onPictureTaken={this._onPictureTaken}
       />
     );
   }
