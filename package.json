@@ -1,8 +1,13 @@
 {
   "name": "react-native-camera-android",
-  "version": "1.0.5",
-  "description": "React native camera view for android",
+  "version": "1.0.7",
+  "description": "React native camera view for android. Enabling you to take pictures directly on camera view, controlling flash light of the device, and also reading barcode from camera.",
   "main": "index.android.js",
+  "keywords": [
+    "react-component",
+    "react-native",
+    "android"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
