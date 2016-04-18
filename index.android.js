@@ -4,7 +4,7 @@
 'use strict';
 
 var React = require('react-native');
-var Subscribable = require('Subscribable');
+var Subscribable = require('subscribable');
 var {
   PropTypes,
   requireNativeComponent,
